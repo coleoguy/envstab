@@ -1,4 +1,4 @@
-#juliette strope
+# Originally J. Strope now Andres and Heath
 #1/13/22
 
 ######### INTERNAL FUNCTIONS ########################
