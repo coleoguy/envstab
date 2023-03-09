@@ -1,6 +1,4 @@
-# Juliette Strope
-# juliettestrope@tamu.edu
-# example of popgen simulation
+# Originally J. Strope now Andres and Heath
 
 source("functions.R")
 # parameters for testing
