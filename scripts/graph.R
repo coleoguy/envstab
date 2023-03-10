@@ -1,7 +1,7 @@
 #Andres Barboza
 
-setwd("~/Documents/env-stab")
-run <- readRDS("res-feb-16.rds")
+setwd("~/Documents/GitHub/envstab")
+run <- readRDS("data/res-mar9.rds")
 library(ggplot2)
 library(reshape)
 library(plyr)
@@ -131,6 +131,17 @@ data.epid <- GetRes2 (run, model = "model epi.dec",
 
 #### ggplot2 ####
 
+PlotLine <- function(chrom.index, change.index, model.index, iter.index) {
+  par(mar=c(6, 3, 2, 2), xpd=TRUE)
+  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[2]], type='l', col = 'blue', ylim=c(0,20), xlim=c(1, 250), ylab='Phenotype', xlab='Generations')
+  lines(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[3]], type='l', col = 'black')
+  legend("bottomleft", inset=c(0, -0.4), legend=c("Mean Phenotype", "Optimal Phenotype"), col=c("blue", "black"), lty=1, cex=0.8)
+  
+  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[1]], type='l', col = 'green', ylim=c(0,1), xlim=c(1, 250), ylab='Fitness', xlab='Generations')
+  legend("bottomleft", inset=c(0, -0.4), legend=c("Mean Fitness"), col=c("green"), lty=1, cex=0.8)
+}
+
+
 PlotHm <- function(run, title) {
   data <- melt(run)
   colnames(data) <- c("x", "y", "value")
@@ -156,4 +167,7 @@ PlotDen <- function(run) {
     xlim(0,1) +
     ylim(0,30)
 }
+
+
+
 

@@ -1,5 +1,6 @@
 # Originally J. Strope now Andres and Heath
 
+setwd("~/Documents/GitHub/envstab")
 source("functions.R")
 # parameters for testing
 loci <- 100
@@ -45,12 +46,13 @@ for(i in 1:length(chrom.num)){
   }
 }
 
-foo <- simulate(loci=100, chrom.num =5, popsize=500, generations=200,
-               prob.change=.05, mut.rate=.01, model="epi.sign")
 
-# load("run2")
 
-#additive########
+
+
+#### Previous plotting ####
+
+#### additive
 
 #0.016
 add01.mse <- as.data.frame(matrix(NA,250,5))
@@ -121,7 +123,11 @@ comp.add.mse <- matrix(c(add.001.mean,add.01.mean,add.1.mean), byrow=FALSE,ncol=
 colnames(comp.add.mse)<-c(0.001, 0.01, 0.1)
 rownames(comp.add.mse)<-c(5,10,15,20,25)
 
-###epi.inc#####
+
+
+
+
+#### epi.inc
 
 #0.01
 inc01.mse <- as.data.frame(matrix(NA,250,5))
@@ -189,7 +195,7 @@ rownames(comp.inc.mse)<-c(5,10,15,20,25)
 
 
 
-######epi.dec####
+#### epi.dec
 
 #0.01
 dec01.mse <- as.data.frame(matrix(NA,250,5))
@@ -236,7 +242,6 @@ for(j in 1:5){
   }
 }
 
-
 #make a table to compare#
 dec.001.mean <- c()
 for(i in 1:5){
@@ -256,7 +261,7 @@ colnames(comp.dec.mse)<-c(0.001, 0.01, 0.1)
 rownames(comp.dec.mse)<-c(5,10,15,20,25)
 
 
-##########epi.sign####
+#### epi.sig
 
 #0.01
 sign01.mse <- as.data.frame(matrix(NA,250,5))

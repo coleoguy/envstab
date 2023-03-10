@@ -117,7 +117,7 @@ GetRecomb <- function(chrom.num,
   #gen.struct stores chromosome length info. chrom.num is number of rows, 2 is 
   #number of columns
   
-  ## TODO: error when running this out of the box
+  # Run on a single chrom.num
   gen.struct <- matrix(NA, chrom.num, 2)
   for(i in 1:nrow(gen.struct)){
     # first column is length of first chromosome
