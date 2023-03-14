@@ -19,7 +19,7 @@ prob.change <- seq(from=0.001, to=0.3, length.out=2)
 imp.loci <- sample(1:loci, 10)
 #what phenotype is favored in the environment
 fav.pheno <- runif(1, min=0, max=20)
-iterations <- 5
+iterations <- 500
 mut.rate <- .001
 model <- c("additive")
 
