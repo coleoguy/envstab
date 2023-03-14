@@ -9,18 +9,18 @@ nClust <- 50
 cl <- makeCluster(nClust, outfile="")
 registerDoSNOW(cl)
 # parameters for testing
-loci <- 100
+loci <- 1000
 popsize <- 1000
 chrom.num <- c(2, 50)
 generations <- 250
 #probbility that the favored phenotype for the environment will change 
-prob.change <- seq(from=0.001, to=0.3, length.out=6)
+prob.change <- seq(from=0.001, to=0.3, length.out=2)
 #loci that will impact the pheonotype
 imp.loci <- sample(1:loci, 10)
 #what phenotype is favored in the environment
 fav.pheno <- runif(1, min=0, max=20)
-iterations <- 500
-mut.rate <- .01
+iterations <- 5
+mut.rate <- .001
 model <- c("additive")
 
 #creating a vector to store the results into and having vectors within it for 
