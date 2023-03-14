@@ -36,8 +36,6 @@ for(j in 1:length(chrom.num)){
   }
 }
 
-
-start_time <- Sys.time()
 #iterating through and storing the results for each chrom num, prob change, model 
 #in "results" vector 
 cur.result <- list()
@@ -55,9 +53,9 @@ for(i in 1:length(chrom.num)){
     }
   }
 }
-end_time <- Sys.time()
+
 stopCluster(cl)
-time <- (end_time - start_time)
+
 
 
 

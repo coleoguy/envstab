@@ -1,7 +1,7 @@
 #Andres Barboza
 
 setwd("~/Documents/GitHub/envstab")
-run <- readRDS("data/res-mar9.rds")
+run <- readRDS("data/res-mar14.rds")
 library(ggplot2)
 library(reshape)
 library(plyr)
@@ -79,7 +79,7 @@ GetRes2 <- function(runs, probc, model, stat, gens){
 }
 
 data1 <- GetRes2(run, probc = "prob.change 0.001",
-                 model = "model additive",
+                 model = "model epi.sign",
                  stat = "mean.fitness",
                  gens = c(150,250))
 
@@ -104,7 +104,7 @@ data5 <- GetRes2(run, probc = "prob.change 0.2402",
                  gens = c(150,250))
 
 data6 <- GetRes2(run, probc = "prob.change 0.3",
-                 model = "model additive",
+                 model = "model epi.sign",
                  stat = "mean.fitness",
                  gens = c(150,250))
 

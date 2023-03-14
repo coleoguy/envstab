@@ -83,7 +83,7 @@ GetPopulation <- function(loci, popsize){
   #stores population in list
   population <- list()
   #generates random uniform distribution to be the favored allele
-  p <- runif(100)
+  p <- runif(loci)
   #calculates unfavored allele based on the frequency of favored allele
   q <- 1-p
   #loop assesing 1 to the population size
@@ -209,7 +209,7 @@ Mutate <- function(population, mut.rate){
 simulate <- function(loci, chrom.num, popsize, generations, 
                     prob.change, mut.rate, model){
   population <- GetPopulation(loci, popsize)
-  imp.loci <- sort(sample(1:100, 10))
+  imp.loci <- sort(sample(1:loci, 10))
   #assesses what the favored genotype is
   fav.pheno <- runif(1, min=0, max=20)
   #selection coeficcient- .01 is the minimum value for fitness and .4 is 
