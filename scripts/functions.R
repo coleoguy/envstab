@@ -152,7 +152,7 @@ GetGametes <- function(population, popsize, chrom.num, loci, fitnesses){
   #in parents list, sample 1- populationsize , size is twice the population size, 
   #replace= T becuase parents can have more than one offspring, probablility of 
   #parents reproducing is a function of fitness
-  parents <- sort(sample(1:popsize, popsize*2, replace=T, prob=fitnesses))
+  parents <- sample(1:popsize, popsize*2, replace=T, prob=fitnesses)
   # get the chromosome structure for the genome
   
   #stores recomb spots for second chromosome in gen.info list ### INCORRECT
@@ -184,7 +184,7 @@ GetGametes <- function(population, popsize, chrom.num, loci, fitnesses){
 }
 
 
-Mutate <- function(population, mut.rate){
+Mutate <- function(population, mut.rate, loci){
   mutants <- sample(1:popsize, popsize*mut.rate)
   #Uses the mutation rate to sample out mutants from total population by their index
   for(i in mutants){
@@ -243,7 +243,7 @@ simulate <- function(loci, chrom.num, popsize, generations,
     
     
     # mutations
-    population <- Mutate(population, mut.rate)
+    population <- Mutate(population, mut.rate, loci)
     
     # gametogenesis
     #getting gametes when input information and then storing it in matrix "gametes"
