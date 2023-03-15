@@ -5,10 +5,10 @@
 
 #function that gets fitness of each individual
 GetFit <- function(genome,
-                   imp.loci, # what genes we keep track of and
-                   # what will impact phenotype
-                   fav.pheno,
-                   model){ #dominance factor
+                    imp.loci, # what genes we keep track of and
+                    # what will impact phenotype
+                    fav.pheno,
+                    model){ #dominance factor
   # creating a vector in loci.w
   loci.w <- c()
   if(model == "additive"){
@@ -68,11 +68,11 @@ GetMeanPheno <- function(population, imp.loci, model){
     if (model== "epi.inc"){
       x <- sum(genome[, imp.loci])
       pheno <- (20*(x/20)^2)
-    }
+      }
     if(model== "epi.dec"){
       x <- sum(genome[, imp.loci])
       pheno <- (13*log(x+1)/2)
-    }
+      }
     cur.phenos[j] <- pheno
   }
   return(mean(cur.phenos))
@@ -166,6 +166,7 @@ GetGametes <- function(population, popsize, chrom.num, loci, fitnesses){
     #this will work its way through each of the most fit parents we sampled
     foo <- population[[parents[j]]]
     # get the recombination points for a single meiosis
+    ###  TODO INCORRECT
     recomb.spots <- GetRecomb(chrom.num, loci)[[1]]
     #start on row 1 or 2, sample all the chromosomes, can be used more than once
     s.strand <- sample(1:2, chrom.num, replace=T)
@@ -208,15 +209,15 @@ Mutate <- function(population, mut.rate, loci, popsize){
 
 
 simulate <- function(loci, chrom.num, popsize, generations, 
-                     prob.change, mut.rate, model){
+                    prob.change, mut.rate, model){
   population <- GetPopulation(loci, popsize)
   imp.loci <- sort(sample(1:loci, 10))
   #assesses what the favored genotype is
-  fav.pheno <- runif(1, min=0, max=20)
+  fav.pheno <- 15
   #selection coeficcient- .01 is the minimum value for fitness and .4 is 
   # maxiumum value. runif() generates a random uniform distribution. 10 is 
   # the number of random samples
-  
+
   mean.fitness <- c()
   mean.phenotypes <- c()
   cur.opt.pheno <- c()
