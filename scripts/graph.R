@@ -78,7 +78,7 @@ GetRes2 <- function(runs, probc, model, stat, gens){
   return(res)
 }
 
-data1 <- GetRes2(run, probc = "prob.change 0.001",
+add0.001 <- GetRes2(run, probc = "prob.change 0.001",
                  model = "model additive",
                  stat = "mean.fitness",
                  gens = c(150,250))
@@ -142,7 +142,8 @@ PlotLine <- function(chrom.index, change.index, model.index, iter.index) {
 }
 
 
-PlotHm <- function(run, title) {
+PlotHm <- function(run) {
+  title <- deparse(substitute(run))
   data <- melt(run)
   colnames(data) <- c("x", "y", "value")
   mycol <- c("navy", "blue", "cyan", "lightcyan", "yellow", "red", "red4")
@@ -158,6 +159,7 @@ PlotHm <- function(run, title) {
 
 
 PlotDen <- function(run) {
+  title <- deparse(substitute(run))
   means <- ddply(run, "chromn", summarise, grp.mean=mean(value))
   ggplot(run, aes(x=value, color=chromn)) +
     geom_density(alpha=0.4) +
@@ -165,7 +167,8 @@ PlotDen <- function(run) {
     geom_vline(data=means, aes(xintercept=grp.mean, color=chromn),
                linetype="dashed") +
     xlim(0,1) +
-    ylim(0,30)
+    ylim(0,30) +
+    labs(title = title)
 }
 
 
