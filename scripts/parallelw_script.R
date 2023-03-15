@@ -2,19 +2,18 @@
 
 #### Script for simulation in parallel on a windows system
 
-setwd("C:/Users/black/Desktop/env.stab")
 source("functions.R")
 library(doSNOW)
-nClust <- 50
+nClust <- 60
 cl <- makeCluster(nClust, outfile="")
 registerDoSNOW(cl)
 # parameters for testing
 loci <- 1000
-popsize <- 1000
+popsize <- 100
 chrom.num <- c(2, 50)
 generations <- 250
 #probbility that the favored phenotype for the environment will change 
-prob.change <- seq(from=0.001, to=0.3, length.out=2)
+prob.change <- seq(from=0.001, to=0.3, length.out=6)
 #loci that will impact the pheonotype
 imp.loci <- sample(1:loci, 10)
 #what phenotype is favored in the environment
