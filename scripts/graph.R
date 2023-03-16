@@ -1,7 +1,6 @@
 #Andres Barboza
 
-setwd("~/Documents/GitHub/envstab")
-run <- readRDS("data/res-mar10.rds")
+run <- readRDS("../data/res-mar15.rds")
 library(ggplot2)
 library(reshape)
 library(plyr)
@@ -81,32 +80,32 @@ GetRes2 <- function(runs, probc, model, stat, gens){
 add0.001 <- GetRes2(run, probc = "prob.change 0.001",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(150,250))
+                 gens = c(1,250))
 
-data2 <- GetRes2(run, probc = "prob.change 0.0608",
+add0.061 <- GetRes2(run, probc = "prob.change 0.0608",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(150,250))
+                 gens = c(1,250))
 
-data3 <- GetRes2(run, probc = "prob.change 0.1206",
+add0.121 <- GetRes2(run, probc = "prob.change 0.1206",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(150,250))
+                 gens = c(1,250))
 
-data4 <- GetRes2(run, probc = "prob.change 0.1804",
+add0.180 <- GetRes2(run, probc = "prob.change 0.1804",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(150,250))
+                 gens = c(1,250))
 
-data5 <- GetRes2(run, probc = "prob.change 0.2402",
+add0.240 <- GetRes2(run, probc = "prob.change 0.2402",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(150,250))
+                 gens = c(1,250))
 
-data6 <- GetRes2(run, probc = "prob.change 0.3",
+add0.300 <- GetRes2(run, probc = "prob.change 0.3",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(150,250))
+                 gens = c(1,250))
 
 
 
@@ -132,13 +131,14 @@ data.epid <- GetRes2 (run, model = "model epi.dec",
 #### ggplot2 ####
 
 PlotLine <- function(chrom.index, change.index, model.index, iter.index) {
-  par(mar=c(6, 3, 2, 2), xpd=TRUE)
-  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[2]], type='l', col = 'blue', ylim=c(0,20), xlim=c(1, 250), ylab='Phenotype', xlab='Generations')
-  lines(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[3]], type='l', col = 'black')
-  legend("bottomleft", inset=c(0, -0.4), legend=c("Mean Phenotype", "Optimal Phenotype"), col=c("blue", "black"), lty=1, cex=0.8)
-  
-  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[1]], type='l', col = 'green', ylim=c(0,1), xlim=c(1, 250), ylab='Fitness', xlab='Generations')
-  legend("bottomleft", inset=c(0, -0.4), legend=c("Mean Fitness"), col=c("green"), lty=1, cex=0.8)
+  par(mar=c(8, 5, 2, 2), xpd=TRUE)
+  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[2]], type='l', las=1, lwd=2 ,col = '#6464FF', ylim=c(0,20), xlim=c(1, 250), ylab='Phenotype', xaxt="n")
+  lines(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[3]], type='l', lwd=1.5, col = 'black')
+  axis(1, tcl=0.4)
+
+  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[1]], type='l', las=1, lwd=2, col = '#C03830', ylim=c(0,1), xlim=c(1, 250), ylab='Fitness', xlab='Generations')
+  legend("bottomleft", inset=c(0, -0.6), legend=c("Optimal Phenotype", "Mean Phenotype", "Mean Fitness"), col=c('black', '#6464FF', '#C03830'), lwd=2, lty=1, cex=0.8)
+  axis(1, tcl=0.4)
 }
 
 
@@ -167,9 +167,72 @@ PlotDen <- function(run) {
     geom_vline(data=means, aes(xintercept=grp.mean, color=chromn),
                linetype="dashed") +
     xlim(0,1) +
-    ylim(0,30) +
+    ylim(0,55) +
     labs(title = title)
 }
+
+
+#### Plotting the models
+
+pheno <- abs(c(0:20))
+add <- pheno
+inc <- (20*(pheno/20)^2)
+dec <- (13*log(pheno+1)/2)
+par(mar=c(7, 5, 2, 2), xpd=TRUE)
+
+plot(c(0:20), add,  type = 'l', lwd=1.5, col='black', las=1, xlim=c(0,20), ylab='Phenotype', xlab='Contributing Alleles')
+lines(c(0:20), inc, type = 'l', lwd=1.5, col='#6464FF')
+lines(c(0:20), dec, type = 'l', lwd=1.5, col='#C03830')
+
+
+
+
+
+plot(c(0:20), (1-(abs((20-add)/20))),  type = 'l', lwd=1.5, col='black', las=1, xlim=c(0,20), ylab='Fitness', xlab='Contributing Alleles')
+lines(c(0:20), (1-(abs((20-inc)/20))), type = 'l', lwd=1.5, col='#6464FF')
+lines(c(0:20), (1-(abs((20-dec)/20))), type = 'l', lwd=1.5, col='#C03830')
+legend("bottomleft", inset=c(0, -0.4), legend=c("Additive", "Increasing Epistasis", "Decreasing Epistasis"), col=c('black', '#6464FF', '#C03830'), lwd=2, lty=1, cex=0.8)
+
+
+# if(model == "additive"){
+#   pheno <- sum(genome[,imp.loci])
+#   w <- 1 - (abs(fav.pheno - pheno)/20)
+# }
+# 
+# if (model== "epi.inc"){
+#   x <- sum(genome[,imp.loci])
+#   pheno <- (20*(x/20)^2)
+# }
+# 
+# if(model== "epi.dec"){
+#   x <- sum(genome[,imp.loci])
+#   pheno <- (13*log(x+1)/2)
+# }
+# w <- 1 - (abs(fav.pheno - pheno)/20)
+# return(w)
+
+foo <- pheno+1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
