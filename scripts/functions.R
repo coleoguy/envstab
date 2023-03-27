@@ -8,12 +8,11 @@ GetFit <- function(genome,
                    imp.loci, # what genes we keep track of and
                    # what will impact phenotype
                    fav.pheno,
-                   model){ #dominance factor
+                   model, max.pheno){ #dominance factor
   # creating a vector in loci.w
   loci.w <- c()
   if(model == "additive"){
     pheno <- sum(genome[,imp.loci])
-    w <- 1 - (abs(fav.pheno - pheno)/20)
   }
   if(model ==  "epi.sign"){
     pheno <- 0
@@ -32,13 +31,13 @@ GetFit <- function(genome,
   }
   if (model== "epi.inc"){
     x <- sum(genome[,imp.loci])
-    pheno <- (20*(x/20)^2)
+    pheno <- (max.pheno*(x/max.pheno)^2)
   }
   if(model== "epi.dec"){
     x <- sum(genome[,imp.loci])
-    pheno <- (13*log(x+1)/2)
+    pheno <- (sqrt(max.pheno*x))
   }
-  w <- 1 - (abs(fav.pheno - pheno)/20)
+  w <- 1 - (abs(fav.pheno - pheno)/max.pheno)
   return(w)
   #returns product(multiplication) of fitness locations
 }
@@ -67,11 +66,11 @@ GetMeanPheno <- function(population, imp.loci, model){
     }
     if (model== "epi.inc"){
       x <- sum(genome[, imp.loci])
-      pheno <- (20*(x/20)^2)
+      pheno <- (max.pheno*(x/max.pheno)^2)
     }
     if(model== "epi.dec"){
       x <- sum(genome[, imp.loci])
-      pheno <- (13*log(x+1)/2)
+      pheno <- (sqrt(max.pheno*x))
     }
     cur.phenos[j] <- pheno
   }
@@ -208,11 +207,12 @@ Mutate <- function(population, mut.rate, loci, popsize){
 
 
 simulate <- function(loci, chrom.num, popsize, generations, 
-                     prob.change, mut.rate, model){
+                     prob.change, mut.rate, model, num.imp.loci){
   population <- GetPopulation(loci, popsize)
-  imp.loci <- sort(sample(1:loci, 10))
+  imp.loci <- sort(sample(1:loci, num.imp.loci))
+  max.pheno <- num.imp.loci*2
   #assesses what the favored genotype is
-  fav.pheno <- runif(1, min=0, max=20)
+  fav.pheno <- runif(1, min=0, max=max.pheno)
   #selection coeficcient- .01 is the minimum value for fitness and .4 is 
   # maxiumum value. runif() generates a random uniform distribution. 10 is 
   # the number of random samples
@@ -225,7 +225,7 @@ simulate <- function(loci, chrom.num, popsize, generations,
     #store fitnesses in a vector
     fitnesses <- c()
     if(runif(1) <= prob.change){
-      fav.pheno <- runif(1, min=0, max=20)
+      fav.pheno <- runif(1, min=0, max=max.pheno)
     }
     #loop to get fitness for each individual in the population and storing it 
     # in matrix "fitnesses". the i makes it run through each specific 
@@ -234,7 +234,8 @@ simulate <- function(loci, chrom.num, popsize, generations,
       fitnesses[i] <- GetFit(genome = population[[i]],
                              imp.loci = imp.loci,
                              fav.pheno = fav.pheno,
-                             model = model)
+                             model = model,
+                             max.pheno)
     }
     # return the mean of fitnesses from the loop and store it in mean.fitnesses 
     mean.fitness[j] <- mean(fitnesses)

@@ -39,7 +39,7 @@ for(i in 1:length(chrom.num)){
       for(m in 1:iterations){
         print(paste("running generation", m))
         cur.result[[m]] <- simulate(loci, chrom.num[i], popsize, generations, prob.change[j], 
-                                  mut.rate, model[k])
+                                  mut.rate, model[k], num.imp.loci)
       }
       results[[i]][[j]][[k]] <- cur.result
     }

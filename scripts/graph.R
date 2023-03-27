@@ -80,32 +80,32 @@ GetRes2 <- function(runs, probc, model, stat, gens){
 add0.001 <- GetRes2(run, probc = "prob.change 0.001",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(1,250))
+                 gens = c(150,250))
 
 add0.061 <- GetRes2(run, probc = "prob.change 0.0608",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(1,250))
+                 gens = c(150,250))
 
 add0.121 <- GetRes2(run, probc = "prob.change 0.1206",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(1,250))
+                 gens = c(150,250))
 
 add0.180 <- GetRes2(run, probc = "prob.change 0.1804",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(1,250))
+                 gens = c(150,250))
 
 add0.240 <- GetRes2(run, probc = "prob.change 0.2402",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(1,250))
+                 gens = c(150,250))
 
 add0.300 <- GetRes2(run, probc = "prob.change 0.3",
                  model = "model additive",
                  stat = "mean.fitness",
-                 gens = c(1,250))
+                 gens = c(150,250))
 
 
 
@@ -125,14 +125,21 @@ data.epii <- GetRes2 (run, model = "model epi.inc",
 data.epid <- GetRes2 (run, model = "model epi.dec",
                      stat = "mean.fitness",
                      gens = c(150,250))
-#### prev####
+#### Comparing stabilities####
+
+chrom2.001 <- add0.001[!add0.001$chromn=="chrom.num 50",]
+chrom2.001$chromn[which(chrom2.001$chromn == "chrom.num 2")] <- "0.001"
+
+#Selects only chrom.num 2 with 0.001 stab. Do this for different chrom.num and
+# then r bind the df.
+
 
 
 #### ggplot2 ####
 
 PlotLine <- function(chrom.index, change.index, model.index, iter.index) {
   par(mar=c(8, 5, 2, 2), xpd=TRUE)
-  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[2]], type='l', las=1, lwd=2 ,col = '#6464FF', ylim=c(0,20), xlim=c(1, 250), ylab='Phenotype', xaxt="n")
+  plot(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[2]], type='l', las=1, lwd=2 ,col = '#6464FF', ylim=c(0,num.imp.loci*2), xlim=c(1, 250), ylab='Phenotype', xaxt="n")
   lines(run[[chrom.index]][[change.index]][[model.index]][[iter.index]][[3]], type='l', lwd=1.5, col = 'black')
   axis(1, tcl=0.4)
 
@@ -163,77 +170,29 @@ PlotDen <- function(run) {
   means <- ddply(run, "chromn", summarise, grp.mean=mean(value))
   ggplot(run, aes(x=value, color=chromn)) +
     geom_density(alpha=0.4) +
-    scale_color_brewer(palette="Dark2") +
+    scale_color_brewer(palette='Set1') +
     geom_vline(data=means, aes(xintercept=grp.mean, color=chromn),
                linetype="dashed") +
-    xlim(0,1) +
-    ylim(0,55) +
-    labs(title = title)
+    xlim(0.5,1) +
+    ylim(0,30) +
+    labs(title = title, colour="Chrom Number") + 
+    xlab("Fitness") + ylab("Density") + theme_bw()
+  
 }
 
 
-#### Plotting the models
+#### Plotting the models ####
 
 pheno <- abs(c(0:20))
 add <- pheno
 inc <- (20*(pheno/20)^2)
-dec <- (13*log(pheno+1)/2)
+dec <- (sqrt(20*pheno))
 par(mar=c(7, 5, 2, 2), xpd=TRUE)
 
-plot(c(0:20), add,  type = 'l', lwd=1.5, col='black', las=1, xlim=c(0,20), ylab='Phenotype', xlab='Contributing Alleles')
-lines(c(0:20), inc, type = 'l', lwd=1.5, col='#6464FF')
-lines(c(0:20), dec, type = 'l', lwd=1.5, col='#C03830')
+plot(c(0:20), add,  type = 'l', lwd=2, col='black', las=1, xlim=c(0,20), ylab='Phenotype', xlab='Contributing Alleles')
+lines(c(0:20), inc, type = 'l', lwd=2, col='#6464FF')
+lines(c(0:20), dec, type = 'l', lwd=2, col='#C03830')
+legend("bottomleft", inset=c(0, -0.25), legend=c("Additive", "Increasing Epistasis", "Decreasing Epistasis"), col=c('black', '#6464FF', '#C03830'), lwd=2, lty=1, cex=0.8)
 
-
-
-
-
-plot(c(0:20), (1-(abs((20-add)/20))),  type = 'l', lwd=1.5, col='black', las=1, xlim=c(0,20), ylab='Fitness', xlab='Contributing Alleles')
-lines(c(0:20), (1-(abs((20-inc)/20))), type = 'l', lwd=1.5, col='#6464FF')
-lines(c(0:20), (1-(abs((20-dec)/20))), type = 'l', lwd=1.5, col='#C03830')
-legend("bottomleft", inset=c(0, -0.4), legend=c("Additive", "Increasing Epistasis", "Decreasing Epistasis"), col=c('black', '#6464FF', '#C03830'), lwd=2, lty=1, cex=0.8)
-
-
-# if(model == "additive"){
-#   pheno <- sum(genome[,imp.loci])
-#   w <- 1 - (abs(fav.pheno - pheno)/20)
-# }
-# 
-# if (model== "epi.inc"){
-#   x <- sum(genome[,imp.loci])
-#   pheno <- (20*(x/20)^2)
-# }
-# 
-# if(model== "epi.dec"){
-#   x <- sum(genome[,imp.loci])
-#   pheno <- (13*log(x+1)/2)
-# }
-# w <- 1 - (abs(fav.pheno - pheno)/20)
-# return(w)
-
-foo <- pheno+1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+####
+#\\

@@ -15,9 +15,9 @@ generations <- 250
 #probbility that the favored phenotype for the environment will change 
 prob.change <- seq(from=0.001, to=0.3, length.out=6)
 #loci that will impact the pheonotype
-imp.loci <- sample(1:loci, 10)
+num.imp.loci <- 10
 #what phenotype is favored in the environment
-fav.pheno <- runif(1, min=0, max=20)
+fav.pheno <- runif(1, min=0, max=num.imp.loci*2)
 iterations <- 500
 mut.rate <- .001
 model <- c("additive")
@@ -46,7 +46,7 @@ for(i in 1:length(chrom.num)){
       x <- foreach(m = 1:iterations, .verbose = F) %dopar% {
         print(paste("running generation", m))
         cur.result[[m]] <- simulate(loci, chrom.num[i], popsize, generations, prob.change[j], 
-                                  mut.rate, model[k])
+                                  mut.rate, model[k], num.imp.loci)
       }
       results[[i]][[j]][[k]] <- x
     }
