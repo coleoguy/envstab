@@ -175,8 +175,13 @@ GetGametes <- function(population, popsize, chrom.num, loci, fitnesses){
       #first starts at the beginning of the chromosome then goes to the recombination spot, 
       #switches chromosome then samples from the spot after the recombination spot up to the 
       #next stopping point the repeats up to the end of the chromosome
-      gamete <- c(gamete, c(foo[s.strand[i], gen.info[i,1]:recomb.spots[i]],
-                            foo[GetOp(s.strand[i]),(recomb.spots[i]+1):gen.info[i,2]]))
+      
+      
+      #gamete <- c(gamete, c(foo[s.strand[i], gen.info[i,1]:recomb.spots[i]],
+      #                      foo[GetOp(s.strand[i]),(recomb.spots[i]+1):gen.info[i,2]]))
+      
+
+      gamete <- c(gamete, c(foo[s.strand[i], gen.info[i,1]:gen.info[i,2]]))
     }
     gametes[[j]] <- gamete
   }
